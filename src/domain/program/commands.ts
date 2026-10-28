@@ -10,7 +10,7 @@ import { hasPushData } from '../training/pushupPlan';
 import { hasRunData } from '../training/runningPlan';
 import { hasSitData } from '../training/situpPlan';
 import type { DayEntries, PlacementInput } from '../training/types';
-import type { PlacementReason, ProgramData, Timeline } from './types';
+import type { DayLog, PlacementReason, ProgramData, Timeline } from './types';
 
 export class PermissionError extends Error {}
 
@@ -21,6 +21,13 @@ export function emptyProgram(): ProgramData {
 export function hasRealResults(entries: DayEntries | null | undefined): boolean {
   if (!entries) return false;
   return hasRunData(entries.run) || hasPushData(entries.push) || hasSitData(entries.sit) || entries.lightDone === true;
+}
+
+/** Today's inputs differ from what was last saved. */
+export function hasUnsavedChanges(log: DayLog | undefined): boolean {
+  if (!log) return false;
+  if (!log.saved) return hasRealResults(log.draft);
+  return JSON.stringify(log.draft) !== JSON.stringify(log.saved);
 }
 
 export type EditPermission = 'editable' | 'past' | 'future' | 'notTrainingInput' | 'notStarted';

@@ -103,15 +103,26 @@ export function hasSitData(entry: SitEntry | undefined): entry is SitEntry {
 
 export function evaluateSit(rx: SitPrescription, entry: SitEntry | undefined): Evaluation {
   if (!hasSitData(entry)) return 'none';
-  return rx.sets.every((target, i) => (entry.sets[i] ?? 0) >= target) ? 'success' : 'fail';
+  return rx.sets.every((target, i) => isSitSetMet(target, entry.sets[i] ?? null)) ? 'success' : 'fail';
+}
+
+export function isSitSetMet(target: number, done: number | null): boolean {
+  return (done ?? 0) >= target;
+}
+
+/** Best single set versus the session total: only the first can count toward 70. */
+export function sitTotals(sets: readonly (number | null)[]): { best: number | null; total: number } {
+  let best: number | null = null;
+  let total = 0;
+  for (const n of sets) {
+    if (!isEntered(n)) continue;
+    total += n;
+    if (best === null || n > best) best = n;
+  }
+  return { best, total };
 }
 
 /** Largest single set of full sit-ups. Prep (half) sit-ups never count. */
 export function bestFullSitSet(rx: SitPrescription, entry: SitEntry): number | null {
-  if (rx.kind === 'prep') return null;
-  let best: number | null = null;
-  for (const n of entry.sets) {
-    if (isEntered(n) && (best === null || n > best)) best = n;
-  }
-  return best;
+  return rx.kind === 'prep' ? null : sitTotals(entry.sets).best;
 }

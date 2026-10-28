@@ -1,0 +1,68 @@
+/* Design tokens. Components use these names only, never raw values. */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-bg: #000000;
+  --color-surface: #141416;
+  --color-raised: #232326;
+  --color-raised-press: #2e2e32;
+  --color-hairline: #2c2c2f;
+
+  /* Text (contrast measured on --color-surface) */
+  --color-text: #f4f4f5;
+  --color-text-2: #a1a1a6; /* 7.4:1 */
+  --color-text-3: #7c7c82; /* 4.6:1 — still readable, used for hints */
+
+  /* Meaning */
+  --color-accent: #ff8a3d; /* running, streaks */
+  --color-accent-soft: rgba(255, 138, 61, 0.14);
+  --color-done: #f4f4f5;
+  --color-on-done: #000000;
+  --color-absent: #e0705f;
+  --color-absent-soft: rgba(224, 112, 95, 0.14);
+  --color-focus: #8ab4ff;
+
+  /* Type */
+  --font: 'IBM Plex Sans Arabic', -apple-system, 'SF Arabic', system-ui, sans-serif;
+  --text-title: 700 2.25rem/1.1 var(--font);
+  --text-number: 700 2.75rem/1 var(--font);
+  --text-h2: 600 1.25rem/1.35 var(--font);
+  --text-h3: 600 1.0625rem/1.4 var(--font);
+  --text-body: 400 1rem/1.55 var(--font);
+  --text-label: 500 0.9375rem/1.4 var(--font);
+  --text-caption: 400 0.8125rem/1.45 var(--font);
+
+  /* Space (4-pt scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Shape */
+  --radius-card: 28px;
+  --radius-field: 14px;
+  --radius-pill: 999px;
+
+  /* Touch */
+  --touch: 44px;
+  --disc: 38px;
+
+  --gutter: 16px;
+  --max-width: 560px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 140ms;
+  --dur: 220ms;
+}
+
+@media (min-width: 400px) {
+  :root {
+    --gutter: 20px;
+    --disc: 42px;
+  }
+}

@@ -1,5 +1,5 @@
 import { isEntered } from './successRules';
-import type { Evaluation, Ladder, PushEntry, PushPosition, PushPrescription } from './types';
+import type { Evaluation, Ladder, PushEntry, PushPosition, PushPrescription, PushSetEntry, PushSetTarget } from './types';
 
 export const PUSH_GOAL = 70;
 
@@ -188,13 +188,13 @@ export function hasPushData(entry: PushEntry | undefined): entry is PushEntry {
  */
 export function evaluatePush(rx: PushPrescription, entry: PushEntry | undefined): Evaluation {
   if (!hasPushData(entry)) return 'none';
-  const ok = rx.sets.every((target, i) => {
-    const set = entry.sets[i];
-    const normal = set?.normal ?? 0;
-    const assisted = rx.assisted ? (set?.assisted ?? 0) : 0;
-    return normal >= target.normalMin && normal + assisted >= target.total;
-  });
-  return ok ? 'success' : 'fail';
+  return rx.sets.every((target, i) => isPushSetMet(rx, target, entry.sets[i])) ? 'success' : 'fail';
+}
+
+export function isPushSetMet(rx: PushPrescription, target: PushSetTarget, set: PushSetEntry | undefined): boolean {
+  const normal = set?.normal ?? 0;
+  const assisted = rx.assisted ? (set?.assisted ?? 0) : 0;
+  return normal >= target.normalMin && normal + assisted >= target.total;
 }
 
 /** Best strict push-ups done without a break: the largest single set, never a sum. */
