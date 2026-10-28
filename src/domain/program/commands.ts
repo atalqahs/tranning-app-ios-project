@@ -82,10 +82,6 @@ export function saveDay(data: ProgramData, date: DateKey, today: DateKey, nowIso
   return { ...data, days: { ...data.days, [date]: { ...log, saved: structuredClone(log.draft), savedAt: nowIso } } };
 }
 
-export function isPausedToday(t: Timeline | null): boolean {
-  return t?.calendar.paused === true;
-}
-
 export function startPause(data: ProgramData, today: DateKey): ProgramData {
   const t = replay(data, today);
   if (!t || t.calendar.paused) throw new PermissionError('لا يمكن بدء التوقف الآن');
